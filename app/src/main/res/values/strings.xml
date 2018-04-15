@@ -5,4 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="username">Name</string>
+    <string name="email">email</string>
+    <string name="view_menu">View Menu</string>
+    <string name="photos">Photos</string>
 </resources>
