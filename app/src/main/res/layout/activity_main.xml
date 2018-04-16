@@ -18,9 +18,13 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@drawable/sidebar"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" >
+        app:itemIconTint="#FFFFFF"
+        app:itemTextAppearance="@style/ItemFont"
+        app:itemTextColor="#FFFFFF"
+        app:menu="@menu/activity_main_drawer">
 
     </android.support.design.widget.NavigationView>
 
