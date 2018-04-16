@@ -8,4 +8,22 @@
     <string name="permission_rationale_location">Access to the location service is required to display your current location on the map</string>
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Busog\'.</string>
     <string name="permission_required_toast">Location permission is required for the map service.</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="username">Name</string>
+    <string name="email">email</string>
+    <string name="view_menu">View Menu</string>
+    <string name="photos">Photos</string>
+    <string name="restaurantName">Cilantro</string>
+    <string name="location">Katipunan, Quezon City</string>
+    <string name="rating">4.70</string>
+    <string name="description">Cilantro originated from Lucca and found its home in the Philippines. Cilantro aims to offer a pleasant and luxurious dining experience serving 15 kinds of pasta, and 20 cheeses. Cilantro offers an array of white and red wine to choose from to accompany your meal. Delicious, yummy, scrumptious. This is Cilantro.</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="reservations_details">(02) 625 2683</string>
+    <string name="reservations_label">For reservations:</string>
+    <string name="inquiries_label">For inquiries:</string>
+    <string name="inquiries_details">+63 917 128 1288</string>
+    <string name="facebook_label">Facebook:</string>
+    <string name="facebook_details">Cilantro Restaurant and Wine Bar</string>
+    <string name="twitter_label">Twitter:</string>
+    <string name="twitter_details">/@cilantroresto</string>
 </resources>
