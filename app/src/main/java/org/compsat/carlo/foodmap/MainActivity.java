@@ -81,15 +81,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Toast.makeText(this, "Explore", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_slideshow) {
-            Toast.makeText(this, "Discover", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_manage) {
-            Toast.makeText(this, "Events", Toast.LENGTH_SHORT).show();
-        }
+//        if (id == R.id.nav_camera) {
+//            Toast.makeText(this, "Explore", Toast.LENGTH_SHORT).show();
+//        } else if (id == R.id.nav_gallery) {
+//            Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+//        } else if (id == R.id.nav_slideshow) {
+//            Toast.makeText(this, "Discover", Toast.LENGTH_SHORT).show();
+//        } else if (id == R.id.nav_manage) {
+//            Toast.makeText(this, "Events", Toast.LENGTH_SHORT).show();
+//        }
 //        else if (id == R.id.nav_share) {
 //            Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
 //        } else if (id == R.id.nav_send) {
