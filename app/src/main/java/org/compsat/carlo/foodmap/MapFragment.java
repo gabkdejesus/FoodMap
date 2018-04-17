@@ -15,9 +15,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +43,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,6 +66,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
+    private EditText mEditText;
+    private String restaurantQuery = "";
 
 
 
@@ -87,6 +94,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mEditText = view.findViewById(R.id.search_bar_edit_text);
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    restaurantQuery = v.getText().toString();
+                    mGoogleMap.clear();
+                    onLocationChanged(mLastLocation);
+                }
+                return false;
+            }
+        });
+
         mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -108,8 +128,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("TEST", "this should output 1");
-
         mGoogleMap = googleMap;
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(context,R.raw.style_json );
         mGoogleMap.setMapStyle(style);
@@ -120,7 +138,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         mGoogleApiClient.connect();
 
         if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Log.d("TEST", "this should output 2");
 
             mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
@@ -149,6 +166,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         sb.append("&radius=1500");
         sb.append("&types=" + "restaurant");
         sb.append("&sensor=true");
+
+        if(!restaurantQuery.equals("")) {
+            sb.append("&keyword=" + restaurantQuery);
+        }
+
         sb.append("&key=AIzaSyACpv7R3eHozVC70zvluxskzY9gY6F8tcI");
 
         Log.d("Map", "<><>api" + sb.toString());
