@@ -286,7 +286,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         @Override
         protected List<HashMap<String, String>> doInBackground(String... jsonData) {
 
-            List<HashMap<String, String>> places = null;
+            List<HashMap<String, String>> places = new ArrayList<>();
             Place_JSON placeJson = new Place_JSON();
 
             try {
