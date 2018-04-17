@@ -26,4 +26,5 @@
     <string name="facebook_details">Cilantro Restaurant and Wine Bar</string>
     <string name="twitter_label">Twitter:</string>
     <string name="twitter_details">/@cilantroresto</string>
+    <string name="network_unavailable">Network Unavailable</string>
 </resources>
