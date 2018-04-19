@@ -9,19 +9,15 @@
     android:orientation="vertical"
     tools:context=".RestaurantActivity">
 
-    <LinearLayout
+
+
+    <ImageView
+        android:id="@+id/featureImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#918E42"
-        android:orientation="vertical">
+        android:scaleX="2"
+        android:layout_height="125dp"
+        app:srcCompat="@android:drawable/btn_dialog"/>
 
-        <ImageView
-            android:id="@+id/featureImage"
-            android:layout_width="match_parent"
-            android:layout_height="125dp"
-            app:srcCompat="@android:drawable/btn_dialog"/>
-
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -57,28 +53,29 @@
                 android:textSize="13sp"/>
 
             <LinearLayout
+                android:id="@+id/ratingLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
 
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:background="#CBCBCB"/>
 
                 <TextView
                     android:id="@+id/ratingLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="#CBCBCB"
                     android:fontFamily="@font/hkgrotesk_bold"
                     android:gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
                     android:padding="5dp"
                     android:text="@string/rating"
                     android:textSize="15sp"/>
@@ -86,191 +83,104 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="2dp"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:background="#CBCBCB"/>
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/descriptionLabel"
+            <LinearLayout
+                android:id="@+id/detailsLayout"
+                android:padding="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:fontFamily="@font/hkgrotesk_semibold"
-                android:text="@string/description"
-                android:textSize="12sp"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/cuisineLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/cuisineLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/hkgrotesk_semibold"
+                        android:layout_weight="0"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/cuisines_label"/>
+
+                    <TextView
+                        android:id="@+id/cuisines"
+                        android:layout_width="wrap_content"
+                        android:fontFamily="@font/hkgrotesk_semibold"
+                        android:textSize="15sp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/cuisines"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/aveCostLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/aveCostLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/hkgrotesk_semibold"
+                        android:textSize="15sp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="5dp"
+                        android:layout_weight="0"
+                        android:text="@string/average_cost_label"/>
+
+                    <TextView
+                        android:id="@+id/cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/hkgrotesk_semibold"
+                        android:textSize="15sp"
+                        android:layout_weight="1"
+                        android:text="@string/cost"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/buttonsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/menuButton"
+                        android:fontFamily="@font/hkgrotesk_semibold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/view_menu"/>
+
+                    <Button
+                        android:id="@+id/photosButton"
+                        android:fontFamily="@font/hkgrotesk_semibold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/view_photos"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
                 android:layout_gravity="center"
                 android:background="#CBCBCB"/>
-
-            <TextView
-                android:id="@+id/menuLabel"
-                android:layout_width="match_parent"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/hkgrotesk_semibold"
-                android:text="@string/view_menu"
-                android:textSize="14sp"/>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="75dp">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    app:srcCompat="@android:drawable/btn_dialog"/>
-            </HorizontalScrollView>
-
-            <TextView
-                android:id="@+id/photosLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:fontFamily="@font/hkgrotesk_semibold"
-                android:text="@string/photos"
-                android:textSize="14sp"/>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    app:srcCompat="@android:drawable/btn_dialog"/>
-            </HorizontalScrollView>
-
-            <TextView
-                android:id="@+id/contactDetailsLabel"
-                android:layout_width="match_parent"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/hkgrotesk_semibold"
-                android:text="@string/contact_details"
-                android:textSize="14sp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/reservationsLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:paddingEnd="5dp"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingStart="0dp"
-                    android:text="@string/reservations_label"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/reservationDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:text="@string/reservations_details"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="20dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/inquiriesLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:paddingEnd="5dp"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingStart="0dp"
-                    android:text="@string/inquiries_label"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/inquireriesDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:text="@string/inquiries_details"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/facebook_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:paddingEnd="5dp"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingStart="0dp"
-                    android:text="@string/facebook_label"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/facebook_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:text="@string/facebook_details"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/twitter_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:paddingEnd="5dp"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingStart="0dp"
-                    android:text="@string/twitter_label"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/twitter_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/hkgrotesk_semibold"
-                    android:text="@string/twitter_details"
-                    android:textSize="14sp"/>
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

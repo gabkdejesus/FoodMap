@@ -1,12 +1,19 @@
 package org.compsat.carlo.foodmap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +21,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -27,23 +37,20 @@ public class RestaurantActivity extends AppCompatActivity {
     private SearchResult mSearchResult;
     private Restaurant mRestaurant;
 
-    private final String apiKey = "becb791fe312a980dd1010bff53244c2";
-    private String lat, lon, query, searchURL;
+    @BindView(R.id.restaurantNameLabel) TextView restaurantName;
+    @BindView(R.id.locationLabel) TextView location;
+    @BindView(R.id.ratingLabel) TextView rating;
+    @BindView(R.id.cuisines) TextView cuisines;
+    @BindView(R.id.cost) TextView cost;
+    @BindView(R.id.featureImage) ImageView featureImage;
+    @BindView(R.id.menuButton) Button menuButton;
+    @BindView(R.id.photosButton) Button photosButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
-
-        lat = "14.649674";
-        lon = "121.074911";
-        query = "silantro";
-
-        searchURL = "https://developers.zomato.com/api/v2.1/search?" +
-                "&q=" + query +
-                "&count=1" +
-                "&lat=" + lat +
-                "&lon=" + lon;
+        ButterKnife.bind(this);
 
         if(isNetworkAvailable()) {
             getData();
@@ -51,6 +58,7 @@ public class RestaurantActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private Restaurant getRestaurantDetails(String jsonData) throws JSONException {
@@ -100,6 +108,17 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     private void getData() {
+        final String apiKey = "becb791fe312a980dd1010bff53244c2";
+        String lat = "14.649674";
+        String lon = "121.074911";
+        String query = "silantro";
+
+        String searchURL = "https://developers.zomato.com/api/v2.1/search?" +
+                "&q=" + query +
+                "&count=1" +
+                "&lat=" + lat +
+                "&lon=" + lon;
+
         final OkHttpClient client = new OkHttpClient();
         Request searchRequest = new Request.Builder()
                 .url(searchURL)
@@ -110,7 +129,7 @@ public class RestaurantActivity extends AppCompatActivity {
         searchCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("TETETE", "TETETETE");
+
             }
 
             @Override
@@ -144,6 +163,12 @@ public class RestaurantActivity extends AppCompatActivity {
                                     Log.v(TAG, jsonData);
                                     if (response.isSuccessful()) {
                                         mRestaurant = getRestaurantDetails(jsonData);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateDisplay();
+                                            }
+                                        });
                                     }
                                 }
                                 catch (Exception e) {
@@ -158,5 +183,28 @@ public class RestaurantActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void updateDisplay() {
+        restaurantName.setText(mRestaurant.getRestaurantName());
+        location.setText(mRestaurant.getLocality());
+        rating.setText(mRestaurant.getRating());
+        cuisines.setText(mRestaurant.getCuisines());
+        cost.setText(mRestaurant.getAveCost() + ".00");
+        Picasso.get().load(mRestaurant.getFeaturedImage()).into(featureImage);
+    }
+
+    @OnClick(R.id.photosButton)
+    public void goToPhotos() {
+        Uri uri = Uri.parse(mRestaurant.getPhotosURL());
+        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(launchBrowser);
+    }
+
+    @OnClick(R.id.menuButton)
+    public void goToMenu() {
+        Uri uri = Uri.parse(mRestaurant.getMenuURL());
+        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(launchBrowser);
     }
 }
