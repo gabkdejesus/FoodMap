@@ -101,6 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     restaurantQuery = v.getText().toString();
+                    mEditText.setText("");
                     mGoogleMap.clear();
                     onLocationChanged(mLastLocation);
                 }
