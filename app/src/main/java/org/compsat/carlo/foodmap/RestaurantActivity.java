@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -52,8 +53,10 @@ public class RestaurantActivity extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+
         if(isNetworkAvailable()) {
-            getData();
+            getData(intent);
         }
         else {
             Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_SHORT).show();
@@ -107,11 +110,12 @@ public class RestaurantActivity extends AppCompatActivity {
         return isAvailable;
     }
 
-    private void getData() {
+    private void getData(Intent intent) {
         final String apiKey = "becb791fe312a980dd1010bff53244c2";
-        String lat = "14.649674";
-        String lon = "121.074911";
-        String query = "silantro";
+        Bundle extras = intent.getExtras();
+        Double lat = ((LatLng) extras.get("rLatLng")).latitude;
+        Double lon = ((LatLng) extras.get("rLatLng")).longitude;
+        String query = extras.getString("rName");
 
         String searchURL = "https://developers.zomato.com/api/v2.1/search?" +
                 "&q=" + query +
