@@ -3,6 +3,7 @@ package org.compsat.carlo.foodmap;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -142,7 +143,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         mGoogleMap.setMapStyle(style);
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(context));
+        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String restaurantName = marker.getTitle();
+                LatLng restaurantLatLng = marker.getPosition();
 
+                Intent intent = new Intent(context, RestaurantActivity.class);
+                intent.putExtra("rName", restaurantName);
+                intent.putExtra("rLatLng", restaurantLatLng);
+                startActivity(intent);
+            }
+        });
 
         enableMyLocation();
 
