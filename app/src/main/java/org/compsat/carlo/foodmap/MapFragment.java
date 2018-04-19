@@ -3,6 +3,7 @@ package org.compsat.carlo.foodmap;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -100,6 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     restaurantQuery = v.getText().toString();
+                    mEditText.setText("");
                     mGoogleMap.clear();
                     onLocationChanged(mLastLocation);
                 }
@@ -118,6 +120,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         super.onPause();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
     public void enableMyLocation() {
         if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             LocationPersmissionUtils.requestPermission(activity, LOCATION_PERMISSION_REQUEST_CODE, Manifest.permission.ACCESS_FINE_LOCATION, true);
@@ -132,6 +143,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(context,R.raw.style_json );
         mGoogleMap.setMapStyle(style);
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(context));
+        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String restaurantName = marker.getTitle();
+                LatLng restaurantLatLng = marker.getPosition();
+
+                Intent intent = new Intent(context, RestaurantActivity.class);
+                intent.putExtra("rName", restaurantName);
+                intent.putExtra("rLatLng", restaurantLatLng);
+                startActivity(intent);
+            }
+        });
+
         enableMyLocation();
 
         buildGoogleApiClient();
@@ -356,7 +381,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
-                markerOptions.title(name + " : " + vicinity);
+                markerOptions.snippet(vicinity);
+
+                markerOptions.title(name);
+
 
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_orange));
 

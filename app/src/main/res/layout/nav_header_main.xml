@@ -17,6 +17,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_weight="1"
+        android:layout_marginTop="50dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/accountphoto"/>
 

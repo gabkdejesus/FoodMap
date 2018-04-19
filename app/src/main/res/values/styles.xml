@@ -16,7 +16,7 @@
 
     <style name="ItemFont">
         <item name="android:fontFamily">@font/hkgrotesk_bold</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">#F6F5EE</item>
         <item name="android:textSize">24sp</item>
     </style>
 
