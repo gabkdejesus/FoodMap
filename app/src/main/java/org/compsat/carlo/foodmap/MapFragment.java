@@ -118,6 +118,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         super.onPause();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
     public void enableMyLocation() {
         if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             LocationPersmissionUtils.requestPermission(activity, LOCATION_PERMISSION_REQUEST_CODE, Manifest.permission.ACCESS_FINE_LOCATION, true);
@@ -132,6 +141,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(context,R.raw.style_json );
         mGoogleMap.setMapStyle(style);
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mGoogleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(context));
+
+
         enableMyLocation();
 
         buildGoogleApiClient();
@@ -356,7 +368,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
-                markerOptions.title(name + " : " + vicinity);
+                markerOptions.snippet(vicinity);
+
+                markerOptions.title(name);
+
 
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_orange));
 
