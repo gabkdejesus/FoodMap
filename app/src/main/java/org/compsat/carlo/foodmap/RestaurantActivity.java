@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,10 +86,9 @@ public class RestaurantActivity extends AppCompatActivity implements NavigationV
 
     private void getData(Intent intent) {
         final String apiKey = "becb791fe312a980dd1010bff53244c2";
-        Bundle extras = intent.getExtras();
+        final Bundle extras = intent.getExtras();
         final Double lat = ((LatLng) extras.get("rLatLng")).latitude;
         final Double lon = ((LatLng) extras.get("rLatLng")).longitude;
-        final String query = extras.getString("rName");
 
         String geocodeURL = "https://developers.zomato.com/api/v2.1/geocode?" +
                 "lat=" + lat +
@@ -117,6 +118,14 @@ public class RestaurantActivity extends AppCompatActivity implements NavigationV
 
                         int entityID = mGeocode.getEntityID();
                         String entityType = mGeocode.getEntityType();
+                        String query = extras.getString("rName");
+
+                        Pattern pt = Pattern.compile("[^a-zA-Z0-9]");
+                        Matcher match = pt.matcher(query);
+                        while(match.find()) {
+                            String s = match.group();
+                            query = query.replaceAll("\\" + s, "");
+                        }
 
                         String searchURL = "https://developers.zomato.com/api/v2.1/search?" +
                                 "entity_id=" + entityID +
