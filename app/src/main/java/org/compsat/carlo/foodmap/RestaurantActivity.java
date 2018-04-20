@@ -35,6 +35,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private Geocode mGeocode;
     private SearchResult mSearchResult;
     private Restaurant mRestaurant;
 
@@ -62,6 +63,135 @@ public class RestaurantActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void getData(Intent intent) {
+        final String apiKey = "becb791fe312a980dd1010bff53244c2";
+        Bundle extras = intent.getExtras();
+        final Double lat = ((LatLng) extras.get("rLatLng")).latitude;
+        final Double lon = ((LatLng) extras.get("rLatLng")).longitude;
+        final String query = extras.getString("rName");
+
+        String geocodeURL = "https://developers.zomato.com/api/v2.1/geocode?" +
+                "lat=" + lat +
+                "&lon=" + lon;
+
+
+        final OkHttpClient client = new OkHttpClient();
+        Request geocodeRequest = new Request.Builder()
+                .url(geocodeURL)
+                .addHeader("user-key", apiKey)
+                .build();
+
+        Call geocodeCall = client.newCall(geocodeRequest);
+        geocodeCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    String jsonData = response.body().string();
+                    Log.v(TAG, jsonData);
+                    if (response.isSuccessful()) {
+                        mGeocode = getGeocodeDetails(jsonData);
+
+                        int entityID = mGeocode.getEntityID();
+                        String entityType = mGeocode.getEntityType();
+
+                        String searchURL = "https://developers.zomato.com/api/v2.1/search?" +
+                                "entity_id=" + entityID +
+                                "&entity_type=" + entityType +
+                                "&q=" + query +
+                                "&count=1" +
+                                "&lat=" + lat +
+                                "&lon=" + lon;
+
+                        Request searchRequest = new Request.Builder()
+                                .url(searchURL)
+                                .addHeader("user-key", apiKey)
+                                .build();
+
+                        Call searchCall = client.newCall(searchRequest);
+                        searchCall.enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                try {
+                                    String jsonData = response.body().string();
+                                    Log.v(TAG, jsonData);
+                                    if (response.isSuccessful()) {
+                                        mSearchResult = getSearchDetails(jsonData);
+
+                                        int restaurantID = mSearchResult.getRestaurantID();
+                                        String restaurantURL = "https://developers.zomato.com/api/v2.1/restaurant?" +
+                                                "res_id=" + restaurantID;
+
+                                        Request restaurantRequest = new Request.Builder()
+                                                .url(restaurantURL)
+                                                .addHeader("user-key", apiKey)
+                                                .build();
+
+                                        Call restaurantCall = client.newCall(restaurantRequest);
+                                        restaurantCall.enqueue(new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+
+                                            }
+
+                                            @Override
+                                            public void onResponse(Call call, Response response) throws IOException {
+                                                try {
+                                                    String jsonData = response.body().string();
+                                                    Log.v(TAG, jsonData);
+                                                    if (response.isSuccessful()) {
+                                                        mRestaurant = getRestaurantDetails(jsonData);
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                updateDisplay();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                catch (Exception e) {
+                                                    Log.e(TAG, "Exception caught: ", e);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                                catch (Exception e) {
+                                    Log.e(TAG, "Exception caught: ", e);
+                                }
+                            }
+                        });
+                    }
+                }
+                catch(Exception e) {
+                    Log.e(TAG, "Exception caught: ", e);
+                }
+            }
+        });
+    }
+
+
+    private Geocode getGeocodeDetails(String jsonData) throws JSONException {
+        JSONObject geocodeJSON = new JSONObject(jsonData);
+        JSONObject location = geocodeJSON.getJSONObject("location");
+
+        Geocode geocode = new Geocode();
+
+        geocode.setEntityType(location.getString("entity_type"));
+        geocode.setEntityID(location.getInt("entity_id"));
+
+        return geocode;
     }
 
     private Restaurant getRestaurantDetails(String jsonData) throws JSONException {
@@ -108,85 +238,6 @@ public class RestaurantActivity extends AppCompatActivity {
         }
 
         return isAvailable;
-    }
-
-    private void getData(Intent intent) {
-        final String apiKey = "becb791fe312a980dd1010bff53244c2";
-        Bundle extras = intent.getExtras();
-        Double lat = ((LatLng) extras.get("rLatLng")).latitude;
-        Double lon = ((LatLng) extras.get("rLatLng")).longitude;
-        String query = extras.getString("rName");
-
-        String searchURL = "https://developers.zomato.com/api/v2.1/search?" +
-                "&q=" + query +
-                "&count=1" +
-                "&lat=" + lat +
-                "&lon=" + lon;
-
-        final OkHttpClient client = new OkHttpClient();
-        Request searchRequest = new Request.Builder()
-                .url(searchURL)
-                .addHeader("user-key", apiKey)
-                .build();
-
-        Call searchCall = client.newCall(searchRequest);
-        searchCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String jsonData = response.body().string();
-                    Log.v(TAG, jsonData);
-                    if (response.isSuccessful()) {
-                        mSearchResult = getSearchDetails(jsonData);
-
-                        int restaurantID = mSearchResult.getRestaurantID();
-                        String restaurantURL = "https://developers.zomato.com/api/v2.1/restaurant?" +
-                                "res_id=" + restaurantID;
-
-                        Request restaurantRequest = new Request.Builder()
-                                .url(restaurantURL)
-                                .addHeader("user-key", apiKey)
-                                .build();
-
-                        Call restaurantCall = client.newCall(restaurantRequest);
-                        restaurantCall.enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                try {
-                                    String jsonData = response.body().string();
-                                    Log.v(TAG, jsonData);
-                                    if (response.isSuccessful()) {
-                                        mRestaurant = getRestaurantDetails(jsonData);
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                updateDisplay();
-                                            }
-                                        });
-                                    }
-                                }
-                                catch (Exception e) {
-                                    Log.e(TAG, "Exception caught: ", e);
-                                }
-                            }
-                        });
-                    }
-                }
-                catch (Exception e) {
-                    Log.e(TAG, "Exception caught: ", e);
-                }
-            }
-        });
     }
 
     private void updateDisplay() {
